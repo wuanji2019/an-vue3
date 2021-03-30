@@ -4,7 +4,6 @@ import { State } from './state'
 import { Mutations, MutationType } from './mutations'
 import { login } from '@/api/user/user'
 import { Md5 } from 'ts-md5'
-import { setToken } from '@/utils/cookies'
 
 export enum ActionTypes {
   Login = 'LOGIN'
@@ -31,16 +30,17 @@ export const actions: ActionTree<State, RootState> & Actions = {
         userName: username.trim(),
         userPwd: Md5.hashStr(password).toString()
       })
-      const { data, success, message } = response
-      if (success) {
-        const { token, nhJewelryAccessName, nhJewelryAccessPlatform } = data
-        commit(MutationType.SET_TOKEN, token)
-        commit(MutationType.SET_NAME, nhJewelryAccessName)
-        commit(MutationType.SET_PLATFORM, nhJewelryAccessPlatform)
-        return Promise.reject(response)
-      } else {
-        Promise.reject(message)
-      }
+      console.log(response)
+      // const { data, success, message } = response
+      // if (success) {
+      //   const { token, nhJewelryAccessName, nhJewelryAccessPlatform } = data
+      //   commit(MutationType.SET_TOKEN, token)
+      //   commit(MutationType.SET_NAME, nhJewelryAccessName)
+      //   commit(MutationType.SET_PLATFORM, nhJewelryAccessPlatform)
+      //   return Promise.reject(response)
+      // } else {
+      Promise.reject(response)
+      // }
     } catch (error) {
       return Promise.reject(error)
     }

@@ -20,14 +20,14 @@
             @submit.prevent="handleSubmit"
           >
             <a-form-item v-bind="validateInfos.username">
-              <a-input v-model:value="userState.username">
+              <a-input v-model:value="loginForm.username">
                 <template #prefix>
                   <UserOutlined style="color: rgba(0, 0, 0, 0.25)" />
                 </template>
               </a-input>
             </a-form-item>
             <a-form-item v-bind="validateInfos.password">
-              <a-input v-model:value="userState.password">
+              <a-input v-model:value="loginForm.password">
                 <template #prefix>
                   <LockOutlined style="color: rgba(0, 0, 0, 0.25)" />
                 </template>
@@ -37,6 +37,7 @@
               <a-button
                 type="primary"
                 html-type="submit"
+                :loading="loading"
                 block
               >
                 登 录
@@ -50,9 +51,11 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, reactive, toRaw } from 'vue'
+import { defineComponent, reactive, toRefs } from 'vue'
 import { useForm } from '@ant-design-vue/use'
 import { UserOutlined, LockOutlined } from '@ant-design/icons-vue'
+import { ActionTypes } from '@/store/modules/user/action'
+import { useStore } from '@/store'
 
 export default defineComponent({
   components: {
@@ -60,32 +63,37 @@ export default defineComponent({
     LockOutlined
   },
   setup() {
-    const userState = reactive({
-      username: '',
-      password: ''
+    const store = useStore()
+    const state = reactive({
+      loginForm: {
+        username: '',
+        password: ''
+      },
+      loginRule: {
+        username: [{ required: true, message: '请输入姓名', trigger: 'blur' }],
+        password: [{ required: true, message: '请输入密码', trigger: 'blur' }]
+      },
+      loading: false
     })
-    const userRule = reactive({
-      username: [{ required: true, message: '请输入姓名', trigger: 'blur' }],
-      password: [{ required: true, message: '请输入密码', trigger: 'blur' }]
-    })
-    const { validate, validateInfos } = useForm(userState, userRule)
+
+    const { validate, validateInfos } = useForm(state.loginForm, state.loginRule)
     const handleSubmit = async() => {
       validate()
-        .then(res => {
-          const { username, password } = toRaw(userState)
-          console.log(res, toRaw(userState))
+        .then(async(valid) => {
+          await store.dispatch(ActionTypes.Login, state.loginForm).finally(() => {
+            state.loading = false
+          })
         })
         .catch(err => {
           console.log('error', err)
         })
     }
     return {
-      userState,
-      userRule,
       validate,
       validateInfos,
       wrapperCol: { span: 24 },
-      handleSubmit
+      handleSubmit,
+      ...toRefs(state)
     }
   }
 })

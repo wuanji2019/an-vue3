@@ -3,16 +3,18 @@
 //     "code": 0,
 //     "msg": "success",
 //     "data": {
-//         "accessToken": "admin-token"
 //     }
 // }
 
 export interface RootObject<T>{
   code: number
-  msg: string
+  message: string
   data: T
+  success: boolean
 }
 
 export interface LoginModel {
-  accessToken: string
+  token: string
+  nhJewelryAccessName: string
+  nhJewelryAccessPlatform: string
 }
