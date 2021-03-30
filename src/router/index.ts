@@ -1,25 +1,17 @@
 import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router'
-import Home from '../views/Home.vue'
+import { asyncRoutes, constantRoutes } from './index.config'
 
-const routes: Array<RouteRecordRaw> = [
-  {
-    path: '/',
-    name: 'Home',
-    component: Home
-  },
-  {
-    path: '/about',
-    name: 'About',
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: () => import(/* webpackChunkName: "about" */ '../views/About.vue')
-  }
+export const asyncRoute: Array<RouteRecordRaw> = [
+  ...asyncRoutes
 ]
-
 const router = createRouter({
   history: createWebHistory(process.env.BASE_URL),
-  routes
+  routes: constantRoutes
 })
+
+export function resetRouter() {
+  const newRouter = router;
+  (router as any).matcher = (newRouter as any).matcher // reset router
+}
 
 export default router

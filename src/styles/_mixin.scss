@@ -1,0 +1,51 @@
+
+@mixin noWrap {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+@mixin flexCenter {
+  display: flex;
+  flex-direction: row;
+  align-items: center;;
+}
+
+@mixin keyframes($animationName)
+{
+    @-webkit-keyframes #{$animationName} {
+        @content;
+    }
+    @-moz-keyframes #{$animationName}  {
+        @content;
+    }
+    @-o-keyframes #{$animationName} {
+        @content;
+    }
+    @keyframes #{$animationName} {
+        @content;
+    }
+}
+
+@mixin tableTxt {
+    .red {
+        color: $red;
+    }
+    .green {
+        color: $green;
+    }
+    .blue {
+        color: $blue;
+    }
+    .orange {
+        color: $orange;
+    }
+  }
+
+@mixin tableHeader {
+    @include flexCenter;
+    justify-content: space-between;
+    padding: 12px 20px;
+    border: 1px solid $orange;
+    border-radius: 5px;
+    background-color: rgba($color: $orange, $alpha: .2);
+}
